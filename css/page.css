@@ -1,0 +1,35 @@
+@font-face{font-family:'Fraunces';src:url(../fonts/fraunces.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Public Sans';src:url(../fonts/public-sans.woff2) format('woff2');font-weight:100 900;font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#072A1F;overflow:hidden;font-family:'Public Sans',Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+#wrap{position:fixed;inset:0 0 28px 0;display:flex;align-items:center;justify-content:center}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;border-radius:8px;background:#F2D3A0}
+.slide{position:absolute;inset:0}
+#foot{position:fixed;left:0;right:0;bottom:0;height:28px;line-height:28px;text-align:center;color:#9FB8AB;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 10px}
+#rotate{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(7,42,31,.94);color:#F6F1E4;text-align:center;z-index:20;padding:24px}
+#rotate b{display:block;font:800 26px 'Fraunces',Georgia,serif;margin-bottom:8px}
+#rotate span{font-size:16px;color:#CFE0D6}
+@media (orientation:portrait) and (pointer:coarse){#rotate{display:flex}}
+@media (max-height:500px){#foot{display:none}#wrap{bottom:0}}
+/* tarjeta de inicio: nombre del jugador */
+.gm-p .who{display:flex;gap:18px;justify-content:center;margin:22px 0 4px;text-align:left}
+.gm-p .who label{display:flex;flex-direction:column;gap:8px;font:800 22px 'Public Sans';color:#0B3A2B;flex:1;max-width:520px}
+.gm-p .who label.sm{max-width:240px;flex:.5}
+.gm-p .who i{font-weight:600;font-style:normal;color:#56655D}
+.gm-p .who input{font:700 30px 'Public Sans';color:#0B3A2B;background:#fff;border:4px solid #0B3A2B;border-radius:16px;padding:12px 18px;outline:none;width:100%}
+.gm-p .who input:focus{border-color:#E09A1A;box-shadow:0 0 0 4px rgba(224,154,26,.3)}
+.gm-p .warn{color:#B23A1E;font-weight:800;margin-top:10px}
+/* puntaje y tabla */
+.gm-p .score{font:800 30px 'Public Sans';color:#56655D;margin-top:-6px}
+.gm-p .score b{display:block;font:800 120px/1 'Fraunces',Georgia,serif;color:#0B3A2B}
+.gm-p .gstats{flex-wrap:wrap}
+.gm-p .gstats.dim span{background:transparent;border:2px solid #DCD2BA;color:#56655D}
+.gm-p .net{margin-top:16px;font-size:24px;font-weight:700;color:#0A7A45}
+.gm-p table.lb{width:100%;border-collapse:collapse;margin-top:8px;font-size:28px;text-align:left}
+.gm-p table.lb th{font:800 20px 'Public Sans';letter-spacing:.1em;text-transform:uppercase;color:#875709;border-bottom:3px solid #0B3A2B;padding:8px 14px}
+.gm-p table.lb td{padding:10px 14px;border-bottom:2px solid #EDE5D0;font-weight:700;color:#22322A}
+.gm-p table.lb td:first-child{width:70px;font:800 30px 'Fraunces',Georgia,serif;color:#0B3A2B}
+.gm-p table.lb td:last-child,.gm-p table.lb th:last-child{text-align:right}
+.gm-p table.lb tr:nth-child(1) td:first-child{color:#E09A1A}
+.gm-p table.lb tr.me td{background:#FBF1D9}
+.gm-card{max-height:1040px;overflow:auto}

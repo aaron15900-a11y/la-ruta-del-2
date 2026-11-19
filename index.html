@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Ruta del 2% · Minijuego del ISAMI</title>
+<meta name="description" content="Minijuego satírico de plataformas sobre el Impuesto sobre Actividades Mercantiles e Industriales (ISAMI) de Baja California. Proyecto de la materia de Impuestos, UABC FCASI.">
+<meta name="theme-color" content="#072A1F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23F2C14E' stroke='%230B3A2B' stroke-width='6'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='900' text-anchor='middle' fill='%230B3A2B'%3E2%25%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/page.css">
+<link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+<div id="wrap">
+  <div id="stage">
+    <section class="slide dark on" data-id="juego">
+      <canvas id="gm" width="960" height="540" aria-label="Minijuego de plataforma: La Ruta del 2%"></canvas>
+      <div id="g-hud"><p id="g-lv">Nivel 1</p><p>Monedas <b id="g-c">0</b></p><p id="g-r">Comprobantes 0/5</p><p>Tiempo <b id="g-t">1:00</b></p></div>
+      <p id="g-bub"></p>
+      <div id="g-touch"><button data-k="L" aria-label="Izquierda">◀</button><button data-k="R" aria-label="Derecha">▶</button><button data-k="J" class="j" aria-label="Saltar">⤒</button></div>
+      <div id="g-modal"><div class="gm-card">
+        <p class="gm-k" id="gm-k">Minijuego · Sátira</p>
+        <h1 class="gm-t" id="gm-t">La Ruta del 2%</h1>
+        <div class="gm-p" id="gm-p"></div>
+        <div class="gm-btns"><button id="g-go">Jugar</button><button id="g-ex" class="ghost2">Ver ganadores</button></div>
+        <p class="gm-n" id="gm-n"></p>
+      </div></div>
+    </section>
+  </div>
+</div>
+<div id="rotate"><div><b>Gira tu teléfono</b><span>El juego se ve mejor en horizontal.</span></div></div>
+<footer id="foot">Impuestos · UABC FCASI · LAE · Joel Aaron Núñez Flores, Alan Paul Chávez Bustamante, Sandy Yuneli Patiño Carrillo y Ricardo Misael Baca Landeros</footer>
+<script src="config.js"></script>
+<script src="js/fit.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
