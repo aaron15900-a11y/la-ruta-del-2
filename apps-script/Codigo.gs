@@ -7,6 +7,8 @@
  * POST  (cuerpo JSON)        -> guarda una partida y responde {ok, score, rank, players}
  * GET   ?action=top&n=10     -> responde {ok, top:[{name, group, score, date}], plays}
  *
+ * La pestaña "Puntajes" guarda cada partida y "Ranking" muestra el mejor puntaje de cada jugador.
+ *
  * El puntaje se vuelve a calcular aquí con las mismas reglas del juego y se rechazan
  * valores imposibles, para que nadie mande un puntaje inventado tan fácil.
  */
@@ -28,11 +30,6 @@ function hoja_() {
   if (primera.join('|') !== ENCABEZADOS.join('|')) {
     sh.getRange(1, 1, 1, ENCABEZADOS.length).setValues([ENCABEZADOS]).setFontWeight('bold');
     sh.setFrozenRows(1);
-  }
-  if (!ss.getSheetByName('Ranking')) {
-    var rk = ss.insertSheet('Ranking');
-    rk.getRange('A1').setFormula('=QUERY(Puntajes!A:M,"select B, C, max(D), count(D) where B is not null group by B, C order by max(D) desc label B \'Nombre\', C \'Grupo\', max(D) \'Mejor puntaje\', count(D) \'Partidas\'",1)');
-    rk.getRange('A1:D1').setFontWeight('bold');
   }
   return sh;
 }
@@ -62,13 +59,27 @@ function ranking_(sh) {
     if (!nombre) return;
     var clave = nombre.toLowerCase();
     var p = Number(f[3]) || 0;
+    var veces = mejor[clave] ? mejor[clave].plays + 1 : 1;
     if (!mejor[clave] || p > mejor[clave].score) {
       mejor[clave] = { name: nombre, group: String(f[2] || ''), score: p, date: f[0] instanceof Date ? f[0].toISOString() : String(f[0]) };
     }
+    mejor[clave].plays = veces;
   });
   var lista = Object.keys(mejor).map(function (k) { return mejor[k]; });
   lista.sort(function (a, b) { return b.score - a.score || (a.date < b.date ? -1 : 1); });
   return { lista: lista, partidas: n };
+}
+
+/** Reescribe la pestaña "Ranking" con el mejor puntaje de cada jugador (valores, sin fórmulas). */
+function escribeRanking_(r) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var rk = ss.getSheetByName('Ranking') || ss.insertSheet('Ranking');
+  rk.clear();
+  var filas = [['Lugar', 'Nombre', 'Grupo', 'Mejor puntaje', 'Partidas']];
+  r.lista.forEach(function (x, i) { filas.push([i + 1, x.name, x.group, x.score, x.plays]); });
+  rk.getRange(1, 1, filas.length, 5).setValues(filas);
+  rk.getRange(1, 1, 1, 5).setFontWeight('bold');
+  rk.setFrozenRows(1);
 }
 
 function doGet(e) {
@@ -76,7 +87,9 @@ function doGet(e) {
     var sh = hoja_();
     var n = Math.max(1, Math.min(50, Number((e && e.parameter && e.parameter.n) || 10)));
     var r = ranking_(sh);
-    return json_({ ok: true, top: r.lista.slice(0, n), players: r.lista.length, plays: r.partidas });
+    var rk = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Ranking');
+    if (!rk || rk.getRange('A1').getFormula()) escribeRanking_(r);
+    return json_({ ok: true, top: r.lista.slice(0, n).map(function (x) { return { name: x.name, group: x.group, score: x.score, date: x.date }; }), players: r.lista.length, plays: r.partidas });
   } catch (err) {
     return json_({ ok: false, error: String(err.message || err) });
   }
@@ -114,6 +127,7 @@ function doPost(e) {
       robadas, multas, jugado, limpiaTexto_(d.ending, 80), partida]);
     SpreadsheetApp.flush();
     var r = ranking_(sh);
+    escribeRanking_(r);
     var lugar = 0;
     for (var j = 0; j < r.lista.length; j++) if (r.lista[j].name.toLowerCase() === nombre.toLowerCase()) { lugar = j + 1; break; }
     return json_({ ok: true, score: puntaje, rank: lugar, players: r.lista.length });
