@@ -228,7 +228,7 @@ const store={get(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}
 let player={name:store.get('r2-name'),group:store.get('r2-group')};
 function title(msg){mode='title';stop();load(0);coins=0;stolen=0;fees=0;draw();
   show('Minijuego · Sátira · menos de 5 minutos','La Ruta del 2%','<p>Ayuda a <b>Doña Chuy</b>, dueña de una tlapalería en Mexicali, a pagar su ISAMI antes del día 25. En el camino hay trámites infinitos, coyotes que «agilizan» y un tal <b>Lic. Bolsillos</b> con bolsillos sospechosamente grandes.</p>'+
-    '<div class="who"><label>Tu nombre<input id="g-name" maxlength="24" autocomplete="nickname" placeholder="Como quieres salir en la tabla" value="'+esc(player.name)+'"></label><label class="sm">Grupo <i>(opcional)</i><input id="g-grp" maxlength="12" placeholder="Ej. 351" value="'+esc(player.group)+'"></label></div>'+
+    '<div class="who"><label>Tu nombre<input id="g-name" maxlength="24" autocomplete="nickname" placeholder="Como quieres salir en la tabla" value="'+esc(player.name)+'"></label><label class="sm">Grupo<input id="g-grp" maxlength="12" placeholder="Opcional" value="'+esc(player.group)+'"></label></div>'+
     (msg?'<p class="warn">'+msg+'</p>':'')+CTRL,'Jugar',NOTE,()=>{
       const n=$('#g-name').value.replace(/\s+/g,' ').trim(),gp=$('#g-grp').value.replace(/\s+/g,' ').trim();
       if(n.length<2){title('Escribe tu nombre para que tu puntaje cuente.');setTimeout(()=>$('#g-name').focus(),30);return;}
@@ -268,12 +268,12 @@ function ending(won){mode='end';stop();bossBeat=won;
     else el.textContent='No se pudo enviar el puntaje'+(r&&r.error?' ('+r.error+')':'')+'. Revisa tu conexión y vuelve a jugar.';});}
 function saveLocal(run,pts){try{const a=JSON.parse(store.get('r2-runs')||'[]');a.push({name:run.name,group:run.group,score:pts,date:new Date().toISOString()});store.set('r2-runs',JSON.stringify(a.slice(-30)));}catch(e){}}
 function sendScore(run){
-  return fetch(window.ISAMI_SCORES_URL,{method:'POST',body:JSON.stringify(run)}).then(r=>r.json()).catch(()=>null);}
+  return fetch(window.ISAMI_SCORES_URL,{method:'POST',body:JSON.stringify(run),credentials:'omit'}).then(r=>r.json()).catch(()=>null);}
 function fetchTop(){
   if(!window.ISAMI_SCORES_URL){let a=[];try{a=JSON.parse(store.get('r2-runs')||'[]');}catch(e){}
     const best={};for(const r of a){const k=r.name.toLowerCase();if(!best[k]||r.score>best[k].score)best[k]=r;}
     return Promise.resolve({ok:true,local:true,top:Object.values(best).sort((x,y)=>y.score-x.score).slice(0,10)});}
-  return fetch(window.ISAMI_SCORES_URL+(window.ISAMI_SCORES_URL.includes('?')?'&':'?')+'action=top&n=10&t='+Date.now()).then(r=>r.json()).catch(()=>null);}
+  return fetch(window.ISAMI_SCORES_URL+(window.ISAMI_SCORES_URL.includes('?')?'&':'?')+'action=top&n=10&t='+Date.now(),{credentials:'omit'}).then(r=>r.json()).catch(()=>null);}
 function board(){mode='board';stop();
   show('Tabla de ganadores','Los que recuperaron más 2%','<p class="net">Cargando…</p>','Jugar','',()=>title(),['Actualizar',()=>board()]);
   fetchTop().then(d=>{if(mode!=='board')return;
@@ -282,7 +282,7 @@ function board(){mode='board';stop();
     mP.innerHTML=(d.local?'<p class="net">Sin conexión a la tabla general: estos son los puntajes de este dispositivo.</p>':'')+
       '<table class="lb"><thead><tr><th>#</th><th>Nombre</th><th>Grupo</th><th>Puntos</th></tr></thead><tbody>'+
       d.top.map((r,i)=>'<tr'+(r.name.toLowerCase()===String(player.name).toLowerCase()?' class="me"':'')+'><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.group||'—')+'</td><td>'+Number(r.score).toLocaleString('es-MX')+'</td></tr>').join('')+
-      '</tbody></table>'+(d.plays?'<p class="net">'+d.plays+' partidas jugadas en total.</p>':'');});}
+      '</tbody></table>'+(d.plays?'<p class="net">'+d.plays+(d.plays===1?' partida jugada':' partidas jugadas')+' en total.</p>':'');});}
 function pause(){if(mode!=='play')return;mode='pause';stop();show('Pausa','Juego en pausa','<p>¿Seguimos?</p>','Continuar','',()=>{mode='play';hide();hud.classList.add('on');if(coarse)touch.classList.add('on');start();});}
 bGo.addEventListener('click',e=>{e.stopPropagation();const f=onGo;onGo=null;if(f)f();});
 bEx.addEventListener('click',e=>{e.stopPropagation();const f=onEx;if(f)f();});

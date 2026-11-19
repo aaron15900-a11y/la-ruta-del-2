@@ -16,7 +16,7 @@ Ayudas a Doña Chuy, dueña de una tlapalería en Mexicali, a pagar su ISAMI ant
 | Saltar | Espacio o ↑ | Botón ⤒ |
 | Pausa | Esc | — |
 
-En el celular conviene ponerlo en horizontal.
+En el celular conviene ponerlo en horizontal. El botón **Pantalla completa** (o la tecla F) agranda el juego; en iPhone se logra abriéndolo desde la pantalla de inicio (Compartir › Agregar a inicio).
 
 1. **La fila del día 25.** Junta los 5 comprobantes y llega a la Ventanilla 3. Esquiva las pilas de trámites y los formatos que caen.
 2. **Trámite exprés.** Salta sobre los coyotes para que suelten las monedas que se llevaron.
@@ -37,7 +37,7 @@ En la tabla de ganadores cuenta el **mejor puntaje de cada jugador**.
 
 Los puntajes se guardan en una hoja de Google Sheets por medio de un pequeño script de Google Apps Script (`apps-script/Codigo.gs`). Cada partida queda en la hoja **Puntajes** y la hoja **Ranking** muestra el mejor puntaje de cada quien.
 
-Para conectarla (se hace una sola vez):
+Ya está conectada a la hoja de Joel. Si algún día hay que volver a conectarla (se hace una sola vez):
 
 1. Abre la hoja *La Ruta del 2% · Puntajes* en Google Drive.
 2. Ve a **Extensiones › Apps Script**, borra lo que haya y pega el contenido de `apps-script/Codigo.gs`. Guarda.
